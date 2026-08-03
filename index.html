@@ -6,11 +6,12 @@
     <title>Приглашение на свадьбу</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="no-scroll">
 
+    <!-- ФОНОВАЯ МУЗЫКА -->
     <audio id="bg-music" src="song.mp3" loop prefetch></audio>
 
-    <!-- Кнопка управления музыкой -->
+    <!-- КНОПКА МУЗЫКИ -->
     <button id="music-toggle" class="music-btn pulse-animation" onclick="toggleMusic()">
         <svg class="icon-play" viewBox="0 0 24 24">
             <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
@@ -20,18 +21,14 @@
         </svg>
     </button>
 
+    <!-- ОВЕРЛЕЙ-КОНВЕРТ (ПОВЕРХ ВСЕГО САЙТА) -->
+    <div id="envelope-overlay" class="envelope-overlay" onclick="openEnvelope()">
+        <img src="envelope.png" alt="Конверт" class="envelope-img">
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ СAЙТА -->
     <div class="main-content">
         
-        <!-- Начальный блок -->
-        <section class="page-block full-screen-block" id="envelope-block">
-            <a href="#main-start" class="envelope-link" id="open-envelope">
-                <img src="envelope.png" alt="Приглашение на свадьбу" class="envelope-img">
-            </a>
-        </section>
-
-        <!-- Основной контент -->
-        <div id="main-start" style="width: 100%;"></div>
-
         <section class="page-block">
             <img src="photo1.png" alt="Главное фото" class="taplink-img">
         </section>
@@ -54,12 +51,12 @@
             <img src="photo4.png" alt="Тайминг дня" class="taplink-img">
         </section>
 
-        <!-- 1. Фото перед анкетой и таймером -->
+        <!-- Фото перед анкетой -->
         <section class="page-block">
             <img src="photo9.png" alt="Фото перед анкетой" class="taplink-img">
         </section>
 
-        <!-- 2. Блок анкеты -->
+        <!-- АНКЕТА -->
         <section class="page-block rsvp-section">
             <form class="rsvp-form" id="rsvpForm" onsubmit="return handleSubmit(event)">
                 <div class="form-group">
@@ -83,7 +80,7 @@
             </form>
         </section>
 
-        <!-- 3. Блок таймера (после анкеты) -->
+        <!-- ТАЙМЕР -->
         <section class="page-block timer-section">
             <div class="timer-container">
                 <div class="timer-title">До свадьбы осталось:</div>
@@ -115,12 +112,34 @@
     </div>
 
     <script>
-        // --- 1. ЛОГИКА МУЗЫКИ И КЛИКА ПО КОНВЕРТУ ---
         const audio = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-toggle');
         const iconPlay = document.querySelector('.icon-play');
         const iconPause = document.querySelector('.icon-pause');
-        const openEnvelopeBtn = document.getElementById('open-envelope');
+
+        // Открытие конверта + включение музыки
+        function openEnvelope() {
+            const overlay = document.getElementById('envelope-overlay');
+            
+            // Включаем музыку
+            if (audio) {
+                audio.currentTime = 33;
+                audio.play().then(() => {
+                    updateUI(true);
+                }).catch(e => console.log("Ошибка воспроизведения:", e));
+            }
+
+            // Плавное исчезновение конверта
+            overlay.classList.add('hidden');
+            
+            // Разрешаем прокрутку сайта
+            document.body.classList.remove('no-scroll');
+
+            // Удаляем конверт из DOM после анимации
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 600);
+        }
 
         function updateUI(isPlaying) {
             if (isPlaying) {
@@ -136,37 +155,14 @@
 
         window.toggleMusic = function() {
             if (audio.paused) {
-                if (audio.currentTime === 0) {
-                    audio.currentTime = 33;
-                }
-                audio.play().then(() => {
-                    updateUI(true);
-                }).catch(e => console.log("Браузер заблокировал звук:", e));
+                if (audio.currentTime === 0) audio.currentTime = 33;
+                audio.play().then(() => updateUI(true)).catch(e => console.log(e));
             } else {
                 audio.pause();
                 updateUI(false);
             }
         };
 
-        if (openEnvelopeBtn) {
-            openEnvelopeBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                if (audio.paused) {
-                    audio.currentTime = 33;
-                    audio.play().then(() => {
-                        updateUI(true);
-                    }).catch(err => console.log("Ошибка воспроизведения:", err));
-                }
-
-                const target = document.getElementById('main-start');
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        }
-
-        // --- 2. ОБРАБОТКА ФОРМЫ АНКЕТЫ ---
         function handleSubmit(event) {
             event.preventDefault();
             alert('Спасибо за ваш ответ!');
@@ -174,7 +170,7 @@
             return false;
         }
 
-        // --- 3. ЛОГИКА ТАЙМЕРА (26.09.2026 12:00) ---
+        // ТАЙМЕР (26.09.2026 12:00)
         (function() {
             const countDownDate = new Date(2026, 8, 26, 12, 0, 0).getTime();
 
@@ -196,10 +192,6 @@
                     if (distance < 0) {
                         clearInterval(timerInterval);
                         dEl.innerText = "00"; hEl.innerText = "00"; mEl.innerText = "00"; sEl.innerText = "00";
-                        const displayEl = document.querySelector(".timer-display");
-                        if (displayEl) {
-                            displayEl.innerHTML = "<span style='font-size: 24px; font-family: \"Forum\", serif;'>Событие началось!</span>";
-                        }
                     } else {
                         dEl.innerText = days < 10 ? "0" + days : days;
                         hEl.innerText = hours < 10 ? "0" + hours : hours;
