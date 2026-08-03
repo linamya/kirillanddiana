@@ -83,7 +83,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="submit-btn">ОТПРАВИТЬ</button>
+                <button type="submit" class="submit-btn" id="submitBtn">ОТПРАВИТЬ</button>
             </form>
         </section>
 
@@ -170,10 +170,49 @@
             }
         };
 
-        function handleSubmit(event) {
+        // ОТПРАВКА ФОРМЫ В VK БОТА ЧЕРЕЗ CLOUDFLARE WORKER
+        async function handleSubmit(event) {
             event.preventDefault();
-            alert('Спасибо за ваш ответ!');
-            document.getElementById('rsvpForm').reset();
+
+            const form = document.getElementById('rsvpForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            const guestName = document.getElementById('guest-name').value.trim();
+            const attendanceValue = form.querySelector('input[name="attendance"]:checked')?.value;
+            
+            const attendanceText = attendanceValue === 'yes' 
+                ? '✅ Да, с удовольствием!' 
+                : '❌ К сожалению, не смогу.';
+
+            const messageText = `📩 Новая анкета на свадьбу!\n\n👤 Гость: ${guestName}\nПрисутствие: ${attendanceText}`;
+
+            // Меняем статус кнопки во время отправки
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'ОТПРАВКА...';
+
+            try {
+                const response = await fetch('https://vk-bot-worker.awsjfe.workers.dev/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: messageText })
+                });
+
+                if (response.ok) {
+                    alert('Спасибо за ваш ответ!');
+                    form.reset();
+                } else {
+                    alert('Произошла ошибка при отправке. Попробуйте еще раз.');
+                }
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                alert('Не удалось отправить ответ. Проверьте подключение к интернету.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'ОТПРАВИТЬ';
+            }
+
             return false;
         }
 
