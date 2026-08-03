@@ -1,10 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    font-family: 'Forum', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Запрет скролла, пока открыт конверт */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* ОВЕРЛЕЙ-КОНВЕРТ НА ВЕСЬ ЭКРАН */
+.envelope-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #e5e5e5;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.envelope-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.envelope-img {
+    max-width: 480px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* МОБИЛЬНЫЙ КОНТЕЙНЕР ДЛЯ ВСЕГО САЙТА */
+.main-content {
+    width: 100%;
+    max-width: 480px;
+    background-color: #ffffff;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.page-block {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.taplink-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.map-link {
+    display: block;
+    width: 100%;
+}
+
 /* --- СТИЛИ ДЛЯ АНКЕТЫ --- */
 .rsvp-section {
     width: 100%;
-    box-sizing: border-box;
     padding: 30px 20px;
     background-color: #ffffff;
-    font-family: 'Forum', serif;
 }
 
 .rsvp-form {
@@ -12,8 +93,6 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
 }
 
 .form-group {
@@ -37,7 +116,6 @@
     font-size: 16px;
     border: 1px solid #000000;
     border-radius: 0;
-    box-sizing: border-box;
     background-color: #ffffff;
     outline: none;
 }
@@ -48,7 +126,7 @@
     gap: 10px;
     font-size: 16px;
     cursor: pointer;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .radio-label input[type="radio"] {
@@ -58,12 +136,12 @@
     cursor: pointer;
 }
 
-/* Белая квадратная кнопка с черной обводкой */
+/* КВАДРАТНАЯ БЕЛАЯ КНОПКА */
 .submit-btn {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #000000;
-    border-radius: 0; /* Квадратная форма */
+    border-radius: 0;
     padding: 14px 20px;
     font-family: 'Forum', serif;
     font-size: 18px;
@@ -74,7 +152,96 @@
     width: 100%;
 }
 
-.submit-btn:hover {
+.submit-btn:hover, .submit-btn:active {
     background-color: #000000;
     color: #ffffff;
+}
+
+/* --- СТИЛИ ДЛЯ ТАЙМЕРА --- */
+.timer-section {
+    width: 100%;
+    padding: 20px 0;
+    background-color: #ffffff;
+}
+
+.timer-container {
+    font-family: 'Forum', serif;
+    color: #000000;
+    text-align: center;
+    padding: 35px 15px;
+    border-radius: 12px;
+    width: 90%; 
+    margin: 0 auto;
+    background-image: url('https://www.dropbox.com/scl/fi/mk87a22rh873my4ocujhe/37.png?rlkey=z8nva1y76hspms8cqm71mp1i6&st=tzpriwge&raw=1'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.timer-title {
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.timer-display {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.timer-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+}
+
+.timer-number {
+    font-size: 32px;
+    line-height: 1.1;
+}
+
+.timer-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    color: #666666;
+}
+
+/* КНОПКА МУЗЫКИ */
+.music-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    background-color: #6A8558; 
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.music-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #ffffff;
+}
+
+.music-btn.pulse-animation {
+    animation: buttonPulse 2s infinite;
+}
+
+@keyframes buttonPulse {
+    0% { box-shadow: 0 0 0 0 #6A8558; }
+    70% { box-shadow: 0 0 0 15px rgba(128, 128, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(128, 128, 0, 0); }
 }
