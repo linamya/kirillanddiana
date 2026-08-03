@@ -1,0 +1,80 @@
+/* --- СТИЛИ ДЛЯ АНКЕТЫ --- */
+.rsvp-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px 20px;
+    background-color: #ffffff;
+    font-family: 'Forum', serif;
+}
+
+.rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+}
+
+.form-label {
+    font-size: 18px;
+    color: #000000;
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    font-family: 'Forum', serif;
+    font-size: 16px;
+    border: 1px solid #000000;
+    border-radius: 0;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.radio-label input[type="radio"] {
+    accent-color: #000000;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Белая квадратная кнопка с черной обводкой */
+.submit-btn {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+    border-radius: 0; /* Квадратная форма */
+    padding: 14px 20px;
+    font-family: 'Forum', serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
